@@ -1,0 +1,23 @@
+{
+  "status": "static-model-review",
+  "has_rig": false,
+  "has_animation": false,
+  "source_triangles": 342040,
+  "export_triangles": 59999,
+  "glb_bytes": 1451812,
+  "under_4_mib": true,
+  "roundtrip_meshes": 1,
+  "dimensions_blender_xyz": [
+    2.9849,
+    1.5421,
+    6.1802
+  ],
+  "reference_fidelity": "Interpretación estilizada; pendiente de revisión del usuario.",
+  "remaining_work": [
+    "Aprobación del parecido",
+    "Topología para deformación",
+    "Rig y pesos",
+    "Idle y Wave",
+    "Pruebas web"
+  ]
+}

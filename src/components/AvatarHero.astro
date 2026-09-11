@@ -1,0 +1,14 @@
+---
+import { existsSync } from 'node:fs';
+import { resolve } from 'node:path';
+import { getImage } from 'astro:assets';
+import AvatarHeroLegacy from './AvatarHeroLegacy.astro';
+import Avatar3D from './avatar/Avatar3D';
+import body from '../assets/avatar/avatar-body.png';
+const enabled = import.meta.env.PUBLIC_AVATAR_3D_ENABLED === 'true'
+  && existsSync(resolve('public/models/avatar-rigged.glb'));
+const poster = enabled ? await getImage({ src: body, width: 1000, format: 'webp' }) : null;
+---
+{enabled && poster ? (
+  <Avatar3D client:visible modelUrl={`${import.meta.env.BASE_URL}models/avatar-rigged.glb`} posterUrl={poster.src} />
+) : <AvatarHeroLegacy />}

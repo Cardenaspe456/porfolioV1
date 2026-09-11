@@ -1,0 +1,220 @@
+---
+import { Image } from 'astro:assets';
+import avatarBody from '../assets/avatar/avatar-body.png';
+import avatarArm from '../assets/avatar/avatar-arm.png';
+import avatarHand from '../assets/avatar/avatar-hand.png';
+---
+
+<div class="avatar-shell" data-avatar-shell aria-hidden="false">
+  <div class="avatar-glow"></div>
+  <div class="avatar-track" data-avatar-track>
+    <button class="avatar-stage" data-avatar-stage type="button" aria-label="Hacer que el avatar salude">
+      <span class="avatar-parallax" data-avatar-parallax>
+        <Image class="avatar-layer avatar-body" src={avatarBody} alt="" width={1200} format="webp" quality={76} loading="eager" fetchpriority="high" />
+        <span class="avatar-arm-rig" data-avatar-arm>
+          <Image class="avatar-layer avatar-arm" src={avatarArm} alt="" width={600} format="webp" quality={74} loading="eager" />
+          <span class="avatar-hand-rig" data-avatar-hand>
+            <Image class="avatar-layer avatar-hand" src={avatarHand} alt="" width={280} format="webp" quality={74} loading="eager" />
+          </span>
+        </span>
+      </span>
+    </button>
+  </div>
+</div>
+
+<script>
+  import gsap from 'gsap';
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  document.querySelectorAll<HTMLElement>('[data-avatar-shell]').forEach((shell) => {
+    const track = shell.querySelector<HTMLElement>('[data-avatar-track]');
+    const stage = shell.querySelector<HTMLButtonElement>('[data-avatar-stage]');
+    const parallax = shell.querySelector<HTMLElement>('[data-avatar-parallax]');
+    const arm = shell.querySelector<HTMLElement>('[data-avatar-arm]');
+    const hand = shell.querySelector<HTMLElement>('[data-avatar-hand]');
+    const hero = shell.closest<HTMLElement>('.hero');
+
+    if (!track || !stage || !parallax || !arm || !hand || !hero) return;
+
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const coarsePointer = window.matchMedia('(pointer: coarse)');
+    let locked = false;
+
+    const wave = () => {
+      if (reduceMotion.matches || locked) return;
+      locked = true;
+
+      gsap.timeline({ onComplete: () => { locked = false; } })
+        .to(arm, { rotate: -7, duration: 0.42, ease: 'back.out(1.7)' })
+        .to(hand, { rotate: -20, duration: 0.13, ease: 'power1.inOut' }, '-=0.1')
+        .to(hand, { rotate: 18, duration: 0.16, repeat: 3, yoyo: true, ease: 'power1.inOut' })
+        .to(hand, { rotate: 0, duration: 0.16, ease: 'power1.out' })
+        .to(arm, { rotate: 0, duration: 0.34, ease: 'power2.inOut' }, '-=0.12');
+    };
+
+    const onPointerMove = (event: PointerEvent) => {
+      if (reduceMotion.matches || coarsePointer.matches) return;
+      const bounds = stage.getBoundingClientRect();
+      const x = (event.clientX - bounds.left) / bounds.width - 0.5;
+      const y = (event.clientY - bounds.top) / bounds.height - 0.5;
+      gsap.to(parallax, {
+        x: x * 16,
+        y: y * 12,
+        rotateY: x * 6,
+        rotateX: y * -4,
+        duration: 0.45,
+        ease: 'power2.out',
+        overwrite: 'auto',
+      });
+    };
+
+    const resetParallax = () => {
+      gsap.to(parallax, { x: 0, y: 0, rotateX: 0, rotateY: 0, duration: 0.55, ease: 'power3.out' });
+    };
+
+    stage.addEventListener('pointermove', onPointerMove);
+    stage.addEventListener('pointerleave', resetParallax);
+    stage.addEventListener('pointerenter', wave);
+    stage.addEventListener('click', wave);
+
+    const media = gsap.matchMedia();
+    media.add({
+      desktop: '(min-width: 761px) and (prefers-reduced-motion: no-preference)',
+      mobile: '(max-width: 760px) and (prefers-reduced-motion: no-preference)',
+    }, (context) => {
+      const { desktop } = context.conditions as { desktop: boolean; mobile: boolean };
+      gsap.fromTo(track,
+        { x: desktop ? '18vw' : '8vw' },
+        {
+          x: desktop ? '-8vw' : '-3vw',
+          yPercent: desktop ? 12 : 4,
+          scale: desktop ? 0.9 : 0.97,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: hero,
+            start: 'top top',
+            end: 'bottom top',
+            scrub: desktop ? 0.65 : 0.35,
+          },
+        },
+      );
+
+      const greeting = gsap.delayedCall(0.8, wave);
+      return () => greeting.kill();
+    });
+
+    media.add('(prefers-reduced-motion: reduce)', () => {
+      gsap.set([track, parallax, arm, hand], { clearProps: 'transform' });
+    });
+  });
+</script>
+
+<style>
+  .avatar-shell {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    overflow: hidden;
+    pointer-events: none;
+    perspective: 1000px;
+  }
+
+  .avatar-glow {
+    position: absolute;
+    top: 5%;
+    right: -8%;
+    width: min(62vw, 900px);
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255, 47, 96, .3) 0%, rgba(255, 47, 96, .12) 38%, transparent 70%);
+    filter: blur(12px);
+  }
+
+  .avatar-track {
+    position: absolute;
+    top: 7%;
+    right: -4%;
+    width: clamp(700px, 66vw, 1030px);
+    height: 88%;
+    pointer-events: none;
+    will-change: transform;
+  }
+
+  .avatar-stage {
+    position: absolute;
+    inset: 0 0 auto;
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1672 / 941;
+    padding: 0;
+    border: 0;
+    outline: none;
+    background: transparent;
+    cursor: pointer;
+    pointer-events: auto;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .avatar-stage:focus-visible::after {
+    content: '';
+    position: absolute;
+    inset: 8% 13% 5% 19%;
+    border: 2px solid #9cff57;
+    border-radius: 48%;
+  }
+
+  .avatar-parallax {
+    position: absolute;
+    inset: 0;
+    display: block;
+    transform-style: preserve-3d;
+    will-change: transform;
+  }
+
+  .avatar-layer { display: block; width: 100%; height: auto; pointer-events: none; user-select: none; }
+
+  .avatar-body {
+    position: absolute;
+    top: 4%;
+    left: 0;
+    z-index: 1;
+    width: 100%;
+    filter: drop-shadow(0 34px 28px rgba(0, 0, 0, .34));
+  }
+
+  .avatar-arm-rig {
+    position: absolute;
+    top: 17%;
+    left: 12%;
+    z-index: 2;
+    display: block;
+    width: 35%;
+    transform-origin: 86% 68%;
+    will-change: transform;
+  }
+
+  .avatar-hand-rig {
+    position: absolute;
+    top: -18%;
+    left: 5%;
+    z-index: 3;
+    display: block;
+    width: 41%;
+    transform-origin: 58% 88%;
+    will-change: transform;
+  }
+
+  @media (max-width: 760px) {
+    .avatar-glow { top: -8%; right: -32%; width: 120vw; opacity: .85; }
+    .avatar-track { top: 5%; right: -35%; width: min(110vw, 700px); height: 58%; }
+    .avatar-stage:focus-visible::after { inset: 4% 12% 2% 18%; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .avatar-track { transform: translateX(0); }
+    .avatar-parallax, .avatar-arm-rig, .avatar-hand-rig { transform: none !important; }
+  }
+</style>
