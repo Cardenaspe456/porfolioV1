@@ -1,0 +1,9 @@
+---
+import SectionHeading from '../ui/SectionHeading.astro';
+const entries = [
+  { period: 'Actualidad', role: 'Desarrollo de productos digitales', organization: 'Proyecto personal / Ejemplo', description: 'Espacio para describir responsabilidades, colaboración y aportes concretos en tu experiencia más reciente.' },
+  { period: 'Periodo por definir', role: 'Diseño y desarrollo frontend', organization: 'Colaboración / Ejemplo', description: 'Espacio para explicar una colaboración, las decisiones que tomaste y lo que aprendiste en el proceso.' },
+  { period: 'Periodo por definir', role: 'Formación y experimentación', organization: 'Aprendizaje / Ejemplo', description: 'Incluye aquí estudios, proyectos académicos o formación relevante para tu enfoque profesional.' },
+];
+---
+<section id="experiencia" class="section container"><div class="section-intro"><SectionHeading number="03" label="Trayectoria" title="CADA ETAPA SUMA." /><p class="section-note">Experiencia, colaboraciones y aprendizaje.<br /><span class="example-label">Trayectoria de ejemplo</span></p></div><div class="experience-list">{entries.map(entry => <article class="experience-row"><p class="eyebrow">{entry.period}</p><div><h3>{entry.role}</h3><p class="organization">{entry.organization}</p></div><p>{entry.description}</p></article>)}</div></section>

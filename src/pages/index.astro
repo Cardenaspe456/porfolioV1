@@ -1,85 +1,12 @@
 ---
-import AvatarHero from '../components/AvatarHero.astro';
-import '../styles/global.css';
+import PortfolioLayout from '../layouts/PortfolioLayout.astro';
+import Hero from '../components/sections/Hero.astro';
+import Projects from '../components/sections/Projects.astro';
+import About from '../components/sections/About.astro';
+import Experience from '../components/sections/Experience.astro';
+import Skills from '../components/sections/Skills.astro';
+import Contact from '../components/sections/Contact.astro';
 ---
-
-<!doctype html>
-<html lang="es">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width" />
-    <meta name="description" content="Portafolio de desarrollo web: experiencias digitales rápidas, accesibles e interactivas." />
-    <meta name="generator" content={Astro.generator} />
-    <title>Developer Portfolio</title>
-  </head>
-  <body>
-    <header class="site-header">
-      <a class="brand" href="#inicio" aria-label="Ir al inicio">DEV<span>.</span></a>
-      <nav aria-label="Navegación principal">
-        <a href="#proyectos">Proyectos</a>
-        <a href="#sobre-mi">Sobre mí</a>
-        <a href="#contacto">Contacto</a>
-      </nav>
-    </header>
-
-    <main>
-      <section id="inicio" class="hero">
-        <div class="hero-copy reveal">
-          <p class="eyebrow">Creative developer · 2026</p>
-          <h1>Construyo experiencias digitales que se sienten <em>vivas.</em></h1>
-          <p class="intro">Desarrollo interfaces rápidas, accesibles e interactivas combinando código, diseño y movimiento.</p>
-          <a class="cta" href="#proyectos">Explorar proyectos <span aria-hidden="true">↘</span></a>
-        </div>
-        <AvatarHero />
-        <p class="scroll-hint">Scroll para explorar</p>
-      </section>
-
-      <section id="proyectos" class="content-section">
-        <p class="section-number">01 / Proyectos seleccionados</p>
-        <div class="project-grid">
-          <article class="project-card reveal">
-            <span>Frontend · 3D</span>
-            <h2>Tu primer proyecto</h2>
-            <p>Reemplaza este contenido por un caso de estudio que explique el problema, tu proceso y el resultado.</p>
-          </article>
-          <article class="project-card accent reveal">
-            <span>Full stack · Producto</span>
-            <h2>Tu segundo proyecto</h2>
-            <p>Incluye métricas, decisiones técnicas y un enlace al repositorio o a la experiencia publicada.</p>
-          </article>
-        </div>
-      </section>
-
-      <section id="sobre-mi" class="content-section statement reveal">
-        <p class="section-number">02 / Sobre mí</p>
-        <h2>Me interesa convertir ideas complejas en productos claros, rápidos y memorables.</h2>
-      </section>
-    </main>
-
-    <footer id="contacto">
-      <p>¿Construimos algo?</p>
-      <a href="mailto:hola@example.com">hola@example.com</a>
-    </footer>
-
-    <script>
-      import gsap from 'gsap';
-      import { ScrollTrigger } from 'gsap/ScrollTrigger';
-
-      gsap.registerPlugin(ScrollTrigger);
-      const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-      if (!reduceMotion) {
-        gsap.utils.toArray<HTMLElement>('.reveal').forEach((element) => {
-          gsap.from(element, {
-            opacity: 0,
-            y: 60,
-            duration: 1,
-            ease: 'power3.out',
-            scrollTrigger: { trigger: element, start: 'top 85%', once: true },
-          });
-        });
-
-      }
-    </script>
-  </body>
-</html>
+<PortfolioLayout>
+  <Hero /><Projects /><About /><Experience /><Skills /><Contact />
+</PortfolioLayout>

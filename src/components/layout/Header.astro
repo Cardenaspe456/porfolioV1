@@ -1,0 +1,41 @@
+---
+import outward from '../../assets/tabler/arrow-up-right.svg';
+import menu from '../../assets/tabler/menu-2.svg';
+const links = [['Proyectos', 'proyectos'], ['Sobre mí', 'sobre-mi'], ['Experiencia', 'experiencia'], ['Habilidades', 'habilidades'], ['Contacto', 'contacto']];
+---
+<header class="site-header container">
+  <a class="brand-lockup" href="/" aria-label="DEV. — Inicio">
+    <span class="brand">DEV.</span>
+    <span class="brand-description">Portafolio de<br />desarrollo</span>
+  </a>
+  <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="main-nav">
+    Menú <img src={menu.src} width="20" height="20" alt="" />
+  </button>
+  <nav id="main-nav" aria-label="Navegación principal">
+    {links.map(([label, id]) => (
+      <a href={`/#${id}`} class:list={[{ 'nav-contact': id === 'contacto' }]}>
+        {label}{id === 'contacto' && <img src={outward.src} width="15" height="15" alt="" />}
+      </a>
+    ))}
+  </nav>
+</header>
+<script>
+  const header = document.querySelector<HTMLElement>('.site-header');
+  const toggle = header?.querySelector<HTMLButtonElement>('.nav-toggle');
+  if (header && toggle) {
+    header.classList.add('has-menu');
+    const setOpen = (open: boolean) => toggle.setAttribute('aria-expanded', String(open));
+    toggle.addEventListener('click', () => setOpen(toggle.getAttribute('aria-expanded') !== 'true'));
+    header.querySelector('nav')?.addEventListener('click', () => setOpen(false));
+    document.addEventListener('click', (event) => {
+      if (event.target instanceof Node && !header.contains(event.target)) setOpen(false);
+    });
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && toggle.getAttribute('aria-expanded') === 'true') {
+        setOpen(false);
+        toggle.focus();
+      }
+    });
+    matchMedia('(max-width: 740px)').addEventListener('change', () => setOpen(false));
+  }
+</script>
