@@ -1,0 +1,23 @@
+---
+import Header from '../components/layout/Header.astro';
+import Footer from '../components/layout/Footer.astro';
+import '../styles/global.css';
+interface Props { title?: string; description?: string }
+const { title = 'DEV. — Diseño y desarrollo web', description = 'Prototipo de portafolio: proyectos, experiencia y desarrollo de interfaces digitales.' } = Astro.props;
+---
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#1849a4" />
+    <title>{title}</title>
+  </head>
+  <body>
+    <a class="skip-link" href="#contenido">Saltar al contenido</a>
+    <Header />
+    <main id="contenido"><slot /></main>
+    <Footer />
+  </body>
+</html>

@@ -1,0 +1,24 @@
+---
+import { Image } from 'astro:assets';
+import outward from '../../assets/tabler/arrow-up-right.svg';
+import type { Project } from '../../data/projects';
+interface Props { project: Project }
+const { project } = Astro.props;
+const url = `/proyectos/${project.slug}/`;
+---
+<article class="project-card">
+  <div class="project-entry">
+    <div class="project-preview">
+      <Image src={project.drawing} alt={project.drawingAlt} widths={[360, 540, 810, 1080]} sizes="(max-width: 740px) 100vw, 33vw" loading="lazy" />
+    </div>
+    <div class="project-caption">
+      <p class="eyebrow"><span>{project.number} /</span> {project.category}</p>
+      <h3>
+        <a href={url} aria-label={`Ver caso de estudio: ${project.title}`}>{project.title}</a>
+        <img src={outward.src} width="22" height="22" alt="" />
+      </h3>
+      <p class="project-summary">{project.summary}</p>
+    </div>
+  </div>
+  <ul class="tags" aria-label="Tecnologías">{project.technologies.map(item => <li>{item}</li>)}</ul>
+</article>

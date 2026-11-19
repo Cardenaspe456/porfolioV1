@@ -1,0 +1,12 @@
+---
+import SectionHeading from '../ui/SectionHeading.astro';
+import ProjectCard from '../ui/ProjectCard.astro';
+import { projects } from '../../data/projects';
+---
+<section id="proyectos" class="section container">
+  <div class="section-intro">
+    <SectionHeading number="01" label="Trabajo seleccionado" title="Del concepto a la interfaz." />
+    <p class="section-note">Tres casos de estudio de ejemplo</p>
+  </div>
+  <div class="project-grid">{projects.map(project => <ProjectCard project={project} />)}</div>
+</section>

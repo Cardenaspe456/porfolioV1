@@ -1,0 +1,9 @@
+---
+import SectionHeading from '../ui/SectionHeading.astro';
+const groups = [
+  { title: 'Frontend', description: 'De la estructura a la interacción.', items: ['HTML semántico', 'CSS / Tailwind', 'JavaScript / TypeScript', 'Astro / React'] },
+  { title: 'Diseño e interacción', description: 'Interfaces pensadas para usarse.', items: ['Diseño responsive', 'Accesibilidad', 'Prototipado en Figma', 'Sistemas de diseño'] },
+  { title: 'Herramientas y proceso', description: 'Una base para trabajar en equipo.', items: ['Git / GitHub', 'Componentes reutilizables', 'Revisión de código', 'Optimización web'] },
+];
+---
+<section id="habilidades" class="section skills-section"><div class="container"><div class="section-intro"><SectionHeading number="04" label="Herramientas y capacidades" title="EL CÓMO IMPORTA." /><p class="section-note">Un conjunto de capacidades por adaptar<br />a tu experiencia real.</p></div><div class="skills-grid">{groups.map((group, i) => <article><p class="eyebrow">Área / 0{i + 1}</p><h3>{group.title}</h3><p>{group.description}</p><ul>{group.items.map(item => <li>{item}</li>)}</ul></article>)}</div></div></section>
